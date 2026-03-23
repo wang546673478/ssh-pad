@@ -3,6 +3,7 @@ package com.sshpad.app.ssh
 import android.content.Context
 import com.sshpad.app.data.model.SSHConnection
 import com.sshpad.app.ssh.verifier.StrictHostKeyVerifier
+import com.sshpad.app.util.AppConstants
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import org.apache.sshd.client.SshClient
@@ -106,7 +107,7 @@ class SSHClientWrapper(private val context: Context) {
         try {
             session.addPasswordIdentity(password)
             val authFuture = session.auth()
-            authFuture.verify(30000, TimeUnit.MILLISECONDS)
+            authFuture.verify(AppConstants.SSH_AUTH_TIMEOUT_MS, TimeUnit.MILLISECONDS)
             return authFuture.isDone && authFuture.isSuccess
         } catch (e: Exception) {
             return false
@@ -135,7 +136,7 @@ class SSHClientWrapper(private val context: Context) {
             }
 
             val authFuture = session.auth()
-            authFuture.verify(30000, TimeUnit.MILLISECONDS)
+            authFuture.verify(AppConstants.SSH_AUTH_TIMEOUT_MS, TimeUnit.MILLISECONDS)
             return authFuture.isDone && authFuture.isSuccess
         } catch (e: Exception) {
             return false
@@ -152,7 +153,7 @@ class SSHClientWrapper(private val context: Context) {
             val channel = session.createChannel("shell").apply {
                 out = NullOutputStream.INSTANCE // We'll handle output separately
             }
-            channel.open().verify(5000, TimeUnit.MILLISECONDS)
+            channel.open().verify(AppConstants.SSH_CHANNEL_OPEN_TIMEOUT_MS, TimeUnit.MILLISECONDS)
             currentChannel = channel
             Result.success(channel)
         } catch (e: Exception) {
@@ -168,7 +169,7 @@ class SSHClientWrapper(private val context: Context) {
         
         return try {
             val channel = session.createExecChannel(command)
-            channel.open().verify(5000, TimeUnit.MILLISECONDS)
+            channel.open().verify(AppConstants.SSH_CHANNEL_OPEN_TIMEOUT_MS, TimeUnit.MILLISECONDS)
             
             val outputStream = ByteArrayOutputStream()
             val errOutputStream = ByteArrayOutputStream()
@@ -176,7 +177,7 @@ class SSHClientWrapper(private val context: Context) {
             channel.stdout.copyTo(outputStream)
             channel.stderr.copyTo(errOutputStream)
             
-            channel.waitFor(EnumSet.of(ClientChannelEvent.CLOSED), 30000, TimeUnit.MILLISECONDS)
+            channel.waitFor(EnumSet.of(ClientChannelEvent.CLOSED), AppConstants.SSH_COMMAND_TIMEOUT_MS, TimeUnit.MILLISECONDS)
             channel.close(false)
             
             val output = outputStream.toString(Charsets.UTF_8)
@@ -239,7 +240,7 @@ class SSHClientWrapper(private val context: Context) {
     fun setKeepAlive(intervalSeconds: Int) {
         currentSession?.clientKeepAliveManager?.apply {
             setKeepAliveInterval(intervalSeconds)
-            setKeepAliveResponseTimeout(intervalSeconds * 3)
+            setKeepAliveResponseTimeout(intervalSeconds * AppConstants.SSH_KEEPALIVE_TIMEOUT_MULTIPLIER)
         }
     }
 
