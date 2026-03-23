@@ -10,48 +10,46 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.sshpad.app.presentation.ui.theme.DraculaTheme
 
 /**
  * Terminal Screen - Interactive SSH terminal session
+ * Week 7: Display connection name in title bar
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TerminalScreen(
-    connectionId: String,
-    onDisconnect: () -> Unit
+    connectionName: String,
+    connectionHost: String,
+    onDisconnect: () -> Unit,
+    onSendCommand: (String) -> Unit = {}
 ) {
-    var terminalOutput by remember { mutableStateOf("") }
+    var terminalOutput by remember { mutableStateOf("SSH Pad Terminal v0.2.0\n") }
     var commandInput by remember { mutableStateOf("") }
     var fontSize by remember { mutableStateOf(14f) }
     var showMenu by remember { mutableStateOf(false) }
-
-    // Mock terminal output - will be replaced with actual SSH output
-    LaunchedEffect(connectionId) {
-        terminalOutput = """
-SSH Pad Terminal v0.1.0
-Connecting to $connectionId...
-
-Welcome to Ubuntu 22.04.3 LTS (GNU/Linux 5.15.0-91-generic x86_64)
-
- * Documentation:  https://help.ubuntu.com
- * Management:     https://landscape.canonical.com
- * Support:        https://ubuntu.com/advantage
-
-Last login: Mon Mar 23 16:00:00 2026 from 192.168.1.50
-
-$ """.trimIndent()
-    }
+    var useDraculaTheme by remember { mutableStateOf(true) }
 
     Scaffold(
         topBar = {
             TopAppBar(
                 title = { 
-                    Text(
-                        "Terminal",
-                        fontSize = 14.sp
-                    ) 
+                    Column {
+                        Text(
+                            text = connectionName,
+                            fontSize = 14.sp,
+                            maxLines = 1
+                        )
+                        Text(
+                            text = connectionHost,
+                            fontSize = 10.sp,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            maxLines = 1
+                        )
+                    }
                 },
                 navigationIcon = {
                     IconButton(onClick = onDisconnect) {
@@ -91,8 +89,21 @@ $ """.trimIndent()
                             )
                             Divider()
                             DropdownMenuItem(
+                                text = { 
+                                    Text(if (useDraculaTheme) "Use Default Theme" else "Use Dracula Theme")
+                                },
+                                onClick = { 
+                                    useDraculaTheme = !useDraculaTheme
+                                    showMenu = false 
+                                }
+                            )
+                            Divider()
+                            DropdownMenuItem(
                                 text = { Text("Disconnect", color = MaterialTheme.colorScheme.error) },
-                                onClick = onDisconnect
+                                onClick = {
+                                    onDisconnect()
+                                    showMenu = false
+                                }
                             )
                         }
                     }
@@ -104,21 +115,20 @@ $ """.trimIndent()
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
-                .background(Color.Black)
+                .background(if (useDraculaTheme) DraculaTheme.background else Color.Black)
         ) {
             // Terminal Output
             Column(
                 modifier = Modifier
                     .weight(1f)
                     .fillMaxWidth()
-                    .padding(8.dp),
-                verticalArrangement = Arrangement.Bottom
+                    .padding(8.dp)
             ) {
                 Text(
                     text = terminalOutput,
-                    color = Color(0xFF00FF00), // Green terminal text
+                    color = if (useDraculaTheme) DraculaTheme.foreground else Color(0xFF00FF00),
                     fontSize = fontSize.sp,
-                    fontFamily = androidx.compose.ui.text.font.FontFamily.Monospace,
+                    fontFamily = FontFamily.Monospace,
                     modifier = Modifier.fillMaxWidth()
                 )
             }
@@ -132,9 +142,9 @@ $ """.trimIndent()
             ) {
                 Text(
                     text = "$ ",
-                    color = Color(0xFF00FF00),
+                    color = if (useDraculaTheme) DraculaTheme.foreground else Color(0xFF00FF00),
                     fontSize = fontSize.sp,
-                    fontFamily = androidx.compose.ui.text.font.FontFamily.Monospace
+                    fontFamily = FontFamily.Monospace
                 )
                 
                 OutlinedTextField(
@@ -144,20 +154,18 @@ $ """.trimIndent()
                     colors = OutlinedTextFieldDefaults.colors(
                         focusedBorderColor = Color.Transparent,
                         unfocusedBorderColor = Color.Transparent,
-                        focusedTextColor = Color.White,
-                        unfocusedTextColor = Color.White
+                        focusedTextColor = if (useDraculaTheme) DraculaTheme.foreground else Color.White,
+                        unfocusedTextColor = if (useDraculaTheme) DraculaTheme.foreground else Color.White
                     ),
                     textStyle = androidx.compose.ui.text.TextStyle(
                         fontSize = fontSize.sp,
-                        fontFamily = androidx.compose.ui.text.font.FontFamily.Monospace,
-                        color = Color.White
+                        fontFamily = FontFamily.Monospace
                     ),
                     singleLine = true,
                     onKeyEvent = { event ->
-                        // Handle Enter key
-                        if (event.nativeEvent.keyCode == 66) { // KeyEvent.KEYCODE_ENTER
-                            terminalOutput += "$commandInput\n"
-                            // TODO: Send command to SSH server
+                        if (event.nativeEvent.keyCode == 66) {
+                            terminalOutput += "$$commandInput\n"
+                            onSendCommand(commandInput)
                             commandInput = ""
                             true
                         } else {
