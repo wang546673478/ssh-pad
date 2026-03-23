@@ -16,23 +16,27 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
 
+/**
+ * App Theme Colors
+ * Week 7: Fixed per UI requirements
+ */
 private val DarkColorScheme = darkColorScheme(
-    primary = Color(0xFF64B5F6),
-    secondary = Color(0xFF81C784),
-    tertiary = Color(0xFFFFB74D),
+    primary = Color(0xFF2563EB),  // Fixed: Blue #2563EB
+    secondary = Color(0xFF10B981),
+    tertiary = Color(0xFFF59E0B),
     background = Color(0xFF121212),
     surface = Color(0xFF1E1E1E),
-    onPrimary = Color.Black,
-    onSecondary = Color.Black,
-    onTertiary = Color.Black,
+    onPrimary = Color.White,
+    onSecondary = Color.White,
+    onTertiary = Color.White,
     onBackground = Color.White,
     onSurface = Color.White
 )
 
 private val LightColorScheme = lightColorScheme(
-    primary = Color(0xFF1976D2),
-    secondary = Color(0xFF388E3C),
-    tertiary = Color(0xFFF57C00),
+    primary = Color(0xFF2563EB),  // Fixed: Blue #2563EB
+    secondary = Color(0xFF10B981),
+    tertiary = Color(0xFFF59E0B),
     background = Color(0xFFFAFAFA),
     surface = Color(0xFFFFFFFF),
     onPrimary = Color.White,
@@ -42,10 +46,27 @@ private val LightColorScheme = lightColorScheme(
     onSurface = Color(0xFF1C1B1F)
 )
 
+/**
+ * Dracula Theme Colors for Terminal
+ * Week 7: Dracula theme support
+ */
+object DraculaTheme {
+    val background = Color(0xFF282A36)
+    val foreground = Color(0xFFF8F8F2)
+    val comment = Color(0xFF6272A4)
+    val cyan = Color(0xFF8BE9FD)
+    val green = Color(0xFF50FA7B)
+    val orange = Color(0xFFFFB86C)
+    val pink = Color(0xFFFF79C6)
+    val purple = Color(0xFFBD93F9)
+    val red = Color(0xFFFF5555)
+    val yellow = Color(0xFFF1FA8C)
+}
+
 @Composable
 fun SSHPadTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
-    dynamicColor: Boolean = true,
+    dynamicColor: Boolean = false,
     content: @Composable () -> Unit
 ) {
     val colorScheme = when {

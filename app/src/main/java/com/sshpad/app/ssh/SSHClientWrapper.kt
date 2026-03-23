@@ -197,6 +197,34 @@ class SSHClientWrapper(private val context: Context) {
      */
     fun sendInput(input: String) {
         currentChannel?.in?.write(input.toByteArray())
+        currentChannel?.in?.flush()
+    }
+
+    /**
+     * Send special key sequence (Ctrl, Alt, Esc, etc.)
+     * Week 7: Special key support
+     */
+    fun sendSpecialKey(keyCode: SpecialKeyCode, modifiers: Set<KeyModifier> = emptySet()) {
+        val escapeSequence = when (keyCode) {
+            SpecialKeyCode.CTRL_C -> byteArrayOf(0x03)
+            SpecialKeyCode.CTRL_D -> byteArrayOf(0x04)
+            SpecialKeyCode.CTRL_Z -> byteArrayOf(0x1A)
+            SpecialKeyCode.TAB -> byteArrayOf(0x09)
+            SpecialKeyCode.ESC -> byteArrayOf(0x1B)
+            SpecialKeyCode.ENTER -> byteArrayOf(0x0D)
+            SpecialKeyCode.BACKSPACE -> byteArrayOf(0x7F)
+            SpecialKeyCode.ARROW_UP -> byteArrayOf(0x1B, 0x5B, 0x41)
+            SpecialKeyCode.ARROW_DOWN -> byteArrayOf(0x1B, 0x5B, 0x42)
+            SpecialKeyCode.ARROW_LEFT -> byteArrayOf(0x1B, 0x5B, 0x44)
+            SpecialKeyCode.ARROW_RIGHT -> byteArrayOf(0x1B, 0x5B, 0x43)
+            SpecialKeyCode.HOME -> byteArrayOf(0x1B, 0x5B, 0x48)
+            SpecialKeyCode.END -> byteArrayOf(0x1B, 0x5B, 0x46)
+            SpecialKeyCode.PAGE_UP -> byteArrayOf(0x1B, 0x5B, 0x35, 0x7E)
+            SpecialKeyCode.PAGE_DOWN -> byteArrayOf(0x1B, 0x5B, 0x36, 0x7E)
+        }
+        
+        currentChannel?.in?.write(escapeSequence)
+        currentChannel?.in?.flush()
     }
 
     /**
@@ -301,4 +329,22 @@ sealed class ConnectionState {
     object Authenticating : ConnectionState()
     data class Connected(val session: ClientSession) : ConnectionState()
     data class Error(val message: String) : ConnectionState()
+}
+
+/**
+ * Special key codes for terminal input
+ * Week 7: Interactive shell enhancement
+ */
+enum class SpecialKeyCode {
+    CTRL_C, CTRL_D, CTRL_Z,
+    TAB, ESC, ENTER, BACKSPACE,
+    ARROW_UP, ARROW_DOWN, ARROW_LEFT, ARROW_RIGHT,
+    HOME, END, PAGE_UP, PAGE_DOWN
+}
+
+/**
+ * Key modifiers
+ */
+enum class KeyModifier {
+    CTRL, ALT, SHIFT
 }
