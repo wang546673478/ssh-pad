@@ -58,9 +58,11 @@ class AnsiParser {
         if (params.isEmpty() || params == "0") return TextStyle()
         
         val style = TextStyle()
-        val codes = params.split(';').mapNotNull { it.toIntOrNull() }
+        val codes = params.split(';').mapNotNull { it.toIntOrNull() }.toMutableList()
         
-        for (code in codes) {
+        var i = 0
+        while (i < codes.size) {
+            val code = codes[i]
             when (code) {
                 0 -> return TextStyle()
                 1 -> style.isBold = true
@@ -92,7 +94,54 @@ class AnsiParser {
                 95 -> style.foregroundColor = AnsiColor.BRIGHT_MAGENTA
                 96 -> style.foregroundColor = AnsiColor.BRIGHT_CYAN
                 97 -> style.foregroundColor = AnsiColor.BRIGHT_WHITE
+                38 -> {
+                    // Extended foreground color
+                    if (i + 1 < codes.size) {
+                        val mode = codes[i + 1]
+                        if (mode == 5 && i + 2 < codes.size) {
+                            // 256-color mode: 38;5;n
+                            val colorIndex = codes[i + 2]
+                            if (colorIndex in 0..255) {
+                                style.foregroundColor = AnsiColor.Indexed(colorIndex)
+                            }
+                            i += 2
+                        } else if (mode == 2 && i + 4 < codes.size) {
+                            // True Color mode: 38;2;r;g;b
+                            val r = codes[i + 2]
+                            val g = codes[i + 3]
+                            val b = codes[i + 4]
+                            if (r in 0..255 && g in 0..255 && b in 0..255) {
+                                style.foregroundColor = AnsiColor.TrueColor(r, g, b)
+                            }
+                            i += 4
+                        }
+                    }
+                }
+                48 -> {
+                    // Extended background color
+                    if (i + 1 < codes.size) {
+                        val mode = codes[i + 1]
+                        if (mode == 5 && i + 2 < codes.size) {
+                            // 256-color mode: 48;5;n
+                            val colorIndex = codes[i + 2]
+                            if (colorIndex in 0..255) {
+                                style.backgroundColor = AnsiColor.Indexed(colorIndex)
+                            }
+                            i += 2
+                        } else if (mode == 2 && i + 4 < codes.size) {
+                            // True Color mode: 48;2;r;g;b
+                            val r = codes[i + 2]
+                            val g = codes[i + 3]
+                            val b = codes[i + 4]
+                            if (r in 0..255 && g in 0..255 && b in 0..255) {
+                                style.backgroundColor = AnsiColor.TrueColor(r, g, b)
+                            }
+                            i += 4
+                        }
+                    }
+                }
             }
+            i++
         }
         
         return style
@@ -127,4 +176,5 @@ sealed class AnsiColor {
     object BRIGHT_CYAN : AnsiColor()
     object BRIGHT_WHITE : AnsiColor()
     data class Indexed(val index: Int) : AnsiColor()
+    data class TrueColor(val r: Int, val g: Int, val b: Int) : AnsiColor()
 }
