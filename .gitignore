@@ -1,0 +1,23 @@
+*.iml
+.gradle
+/local.properties
+/.idea
+.DS_Store
+/build
+/captures
+.externalNativeBuild
+.cxx
+local.properties
+
+# Keystore files
+*.jks
+*.keystore
+
+# Google Services
+google-services.json
+
+# VS Code
+.vscode/
+
+# Kotlin
+*.kotlin_module

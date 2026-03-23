@@ -1,0 +1,18 @@
+<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- SSH Shield Icon -->
+  <!-- Background shield -->
+  <path d="M12 2L4 6v6c0 5 3.5 9.5 8 11 4.5-1.5 8-6 8-11V6l-8-4z" 
+        fill="#2563EB" opacity="0.15"/>
+  
+  <!-- Shield outline -->
+  <path d="M12 2L4 6v6c0 5 3.5 9.5 8 11 4.5-1.5 8-6 8-11V6l-8-4z" 
+        stroke="#2563EB" stroke-width="1.5" fill="none"/>
+  
+  <!-- SSH text -->
+  <text x="12" y="14.5" 
+        font-family="monospace" 
+        font-size="5.5" 
+        fill="#2563EB" 
+        text-anchor="middle" 
+        font-weight="700">SSH</text>
+</svg>
