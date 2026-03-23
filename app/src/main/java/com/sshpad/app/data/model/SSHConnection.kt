@@ -25,6 +25,10 @@ data class SSHConnection(
     val keepAliveInterval: Int = 60, // seconds
     val connectionTimeout: Int = 30000, // milliseconds
     val lastConnectedAt: Long? = null,
+    val connectionCount: Int = 0,
+    val isFavorite: Boolean = false,
+    val tags: List<String> = emptyList(),
+    val recentCommands: List<String> = emptyList(),
     val createdAt: Long = System.currentTimeMillis(),
     val updatedAt: Long = System.currentTimeMillis(),
     val color: String = "#2196F3" // Connection color for UI
