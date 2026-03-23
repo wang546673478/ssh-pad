@@ -126,3 +126,59 @@
 *创建时间：2026-04-05*
 *负责人：王设计师*
 *状态：待评审*
+
+---
+
+## Week 6 更新 (2026-05-03)
+
+### 设计稿完善状态
+
+**终端界面:**
+- ✅ 工具栏按钮布局确认 (Ctrl/Alt/Tab/ESC/剪贴板/键盘)
+- ✅ 字体缩放手势规范 (双指缩放 10-24sp)
+- ✅ 光标闪烁动画 (500ms 间隔，Primary Blue)
+- ✅ 文本选择和复制交互
+- ✅ ANSI Dracula 配色 8 色映射
+
+**设置界面:**
+- ✅ 分组列表设计 (5 个分组)
+- ✅ 设置项样式 (72dp 高度，16dp 内边距)
+- ✅ 子页面设计 (主题选择/字体大小滑块)
+- ✅ 开关组件状态 (跟随 Material 3)
+
+**详细标注:**
+- 参考：[Figma 标注文档](./annotations/figma-annotations.md)
+- Figma 链接：(待上传)
+
+### UI 走查问题
+
+详见：[Week 6 UI 走查报告](./deliverables/week6-ui-review.md)
+
+**P0 问题 (3 个):**
+- 主题颜色偏差 (Theme.kt)
+- 终端颜色使用纯绿 (应使用 Dracula 配色)
+- 缺少 ANSI 解析器
+
+**P1 问题 (5 个):**
+- 终端标题未显示连接名
+- 终端字体未使用 JetBrains Mono
+- 缺少光标闪烁动画
+- 连接列表缺少选中状态
+- 缺少 ViewModel 层
+
+**修复建议:**
+- 详见 week6-ui-review.md 中的"修复建议"章节
+- 代码示例已提供
+
+### 图标资源包 v2.0
+
+**已交付 42 个图标:**
+- 5 个自定义 SVG 图标 (ic_ssh, ic_connected, ic_connecting, ic_disconnected, ic_empty_state)
+- 37 个 Material Icons 映射
+
+**文档:** [图标资源包 v2.0](./assets/icons/icon-pack-v2.md)
+
+---
+
+*Week 6 更新：2026-05-03*
+*更新人：UI/UX 设计师*

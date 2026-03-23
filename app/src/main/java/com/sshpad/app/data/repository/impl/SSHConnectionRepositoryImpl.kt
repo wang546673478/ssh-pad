@@ -8,6 +8,7 @@ import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import com.sshpad.app.data.model.SSHConnection
 import com.sshpad.app.data.repository.SSHConnectionRepository
+import com.sshpad.app.security.SecureStorage
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.serialization.Serializable
@@ -15,31 +16,67 @@ import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import java.io.IOException
 
-@Serializable
-private data class ConnectionJson(
-    val id: String,
-    val name: String,
-    val host: String,
-    val port: Int,
-    val username: String,
-    val authType: String,
-    val password: String?,
-    val privateKeyPath: String?,
-    val privateKeyPassphrase: String?,
-    val keepAliveInterval: Int,
-    val connectionTimeout: Int,
-    val lastConnectedAt: Long?,
-    val createdAt: Long,
-    val updatedAt: Long,
-    val color: String
-)
-
+/**
+ * Repository implementation with secure credential storage
+ * 
+ * Security:
+ * - Connection metadata stored in DataStore (non-sensitive)
+ * - Passwords and passphrases stored in EncryptedSharedPreferences via SecureStorage
+ */
 class SSHConnectionRepositoryImpl(
-    private val context: Context
+    private val context: Context,
+    private val secureStorage: SecureStorage
 ) : SSHConnectionRepository {
 
     private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "ssh_connections")
     private val json = Json { ignoreUnknownKeys = true }
+
+    /**
+     * Get credentials from SecureStorage for a connection
+     */
+    private suspend fun getCredentials(connectionId: String): ConnectionCredentials {
+        return ConnectionCredentials(
+            password = secureStorage.getPassword(connectionId),
+            passphrase = secureStorage.getPassphrase(connectionId)
+        )
+    }
+
+    /**
+     * Save credentials to SecureStorage
+     */
+    private suspend fun saveCredentials(connectionId: String, password: String?, passphrase: String?) {
+        password?.let { secureStorage.savePassword(connectionId, it) }
+        passphrase?.let { secureStorage.savePassphrase(connectionId, it) }
+    }
+
+    /**
+     * Delete credentials from SecureStorage
+     */
+    private suspend fun deleteCredentials(connectionId: String) {
+        secureStorage.deleteCredentials(connectionId)
+    }
+
+    @Serializable
+    private data class ConnectionJson(
+        val id: String,
+        val name: String,
+        val host: String,
+        val port: Int,
+        val username: String,
+        val authType: String,
+        val privateKeyPath: String?,
+        val keepAliveInterval: Int,
+        val connectionTimeout: Int,
+        val lastConnectedAt: Long?,
+        val createdAt: Long,
+        val updatedAt: Long,
+        val color: String
+    )
+
+    private data class ConnectionCredentials(
+        val password: String? = null,
+        val passphrase: String? = null
+    )
 
     override fun getAllConnections(): Flow<List<SSHConnection>> {
         return context.dataStore.data.map { preferences ->
@@ -63,6 +100,16 @@ class SSHConnectionRepositoryImpl(
                 null
             }
         }.firstOrNull()
+    }
+
+    /**
+     * Get connection with credentials loaded from SecureStorage
+     * Use this when you need to access password or passphrase
+     */
+    suspend fun getConnectionWithCredentials(id: String): SSHConnectionWithCredentials? {
+        val connection = getConnectionById(id) ?: return null
+        val credentials = getCredentials(id)
+        return SSHConnectionWithCredentials(connection, credentials.password, credentials.passphrase)
     }
 
     override suspend fun getRecentConnections(limit: Int): List<SSHConnection> {
@@ -97,6 +144,22 @@ class SSHConnectionRepositoryImpl(
         }
     }
 
+    /**
+     * Add a new connection with credentials
+     * @param connection The connection metadata
+     * @param password Optional password (will be stored encrypted)
+     * @param passphrase Optional private key passphrase (will be stored encrypted)
+     */
+    suspend fun addConnectionWithCredentials(
+        connection: SSHConnection,
+        password: String? = null,
+        passphrase: String? = null
+    ): Result<String> {
+        return addConnection(connection).onSuccess { connectionId ->
+            saveCredentials(connectionId, password, passphrase)
+        }
+    }
+
     override suspend fun updateConnection(connection: SSHConnection): Result<Unit> {
         return try {
             context.dataStore.edit { preferences ->
@@ -117,6 +180,10 @@ class SSHConnectionRepositoryImpl(
 
     override suspend fun deleteConnection(id: String): Result<Unit> {
         return try {
+            // Delete credentials from SecureStorage first
+            deleteCredentials(id)
+            
+            // Then delete metadata from DataStore
             context.dataStore.edit { preferences ->
                 val currentJson = preferences[CONNECTIONS_KEY] ?: "[]"
                 val currentList = json.decodeFromString<List<ConnectionJson>>(currentJson)
@@ -179,9 +246,7 @@ class SSHConnectionRepositoryImpl(
             port = this.port,
             username = this.username,
             authType = this.authType.name,
-            password = this.password,
             privateKeyPath = this.privateKeyPath,
-            privateKeyPassphrase = this.privateKeyPassphrase,
             keepAliveInterval = this.keepAliveInterval,
             connectionTimeout = this.connectionTimeout,
             lastConnectedAt = this.lastConnectedAt,
@@ -189,6 +254,27 @@ class SSHConnectionRepositoryImpl(
             updatedAt = this.updatedAt,
             color = this.color
         )
+    }
+
+    private suspend fun ConnectionJson.toDomainModelWithCredentials(): SSHConnection {
+        val credentials = getCredentials(this.id)
+        return SSHConnection(
+            id = this.id,
+            name = this.name,
+            host = this.host,
+            port = this.port,
+            username = this.username,
+            authType = SSHConnection.AuthType.valueOf(this.authType),
+            privateKeyPath = this.privateKeyPath,
+            keepAliveInterval = this.keepAliveInterval,
+            connectionTimeout = this.connectionTimeout,
+            lastConnectedAt = this.lastConnectedAt,
+            createdAt = this.createdAt,
+            updatedAt = this.updatedAt,
+            color = this.color
+        )
+        // Note: password and passphrase are retrieved from SecureStorage when needed
+        // They are not part of the SSHConnection model for security
     }
 
     private fun ConnectionJson.toDomainModel(): SSHConnection {
@@ -199,9 +285,7 @@ class SSHConnectionRepositoryImpl(
             port = this.port,
             username = this.username,
             authType = SSHConnection.AuthType.valueOf(this.authType),
-            password = this.password,
             privateKeyPath = this.privateKeyPath,
-            privateKeyPassphrase = this.privateKeyPassphrase,
             keepAliveInterval = this.keepAliveInterval,
             connectionTimeout = this.connectionTimeout,
             lastConnectedAt = this.lastConnectedAt,

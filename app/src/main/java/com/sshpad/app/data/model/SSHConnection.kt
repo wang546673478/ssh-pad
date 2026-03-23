@@ -4,6 +4,11 @@ import java.util.UUID
 
 /**
  * SSH Connection configuration data model
+ * 
+ * Security Notes:
+ * - password and privateKeyPassphrase are NOT stored in this model
+ * - Sensitive credentials must be stored in SecureStorage (EncryptedSharedPreferences)
+ * - This model only contains non-sensitive connection metadata
  */
 data class SSHConnection(
     val id: String = UUID.randomUUID().toString(),
@@ -12,9 +17,11 @@ data class SSHConnection(
     val port: Int = 22,
     val username: String,
     val authType: AuthType = AuthType.PASSWORD,
-    val password: String? = null,
+    // Note: password is intentionally excluded from this model
+    // Store in SecureStorage using connection.id as key
     val privateKeyPath: String? = null,
-    val privateKeyPassphrase: String? = null,
+    // Note: privateKeyPassphrase is intentionally excluded from this model
+    // Store in SecureStorage using connection.id as key
     val keepAliveInterval: Int = 60, // seconds
     val connectionTimeout: Int = 30000, // milliseconds
     val lastConnectedAt: Long? = null,

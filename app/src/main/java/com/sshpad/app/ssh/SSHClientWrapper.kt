@@ -1,13 +1,14 @@
 package com.sshpad.app.ssh
 
+import android.content.Context
 import com.sshpad.app.data.model.SSHConnection
+import com.sshpad.app.ssh.verifier.StrictHostKeyVerifier
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import org.apache.sshd.client.SshClient
 import org.apache.sshd.client.channel.ClientChannel
 import org.apache.sshd.client.channel.ClientChannelEvent
 import org.apache.sshd.client.future.AuthFuture
-import org.apache.sshd.client.keyverifier.AcceptAllServerKeyVerifier
 import org.apache.sshd.client.session.ClientSession
 import org.apache.sshd.common.config.keys.loader.DefaultPublicKeyResourceDecoder
 import org.apache.sshd.common.util.buffer.Buffer
@@ -19,11 +20,18 @@ import java.util.concurrent.TimeUnit
 
 /**
  * SSH Client wrapper using Apache MINA sshd
+ * 
+ * Security features:
+ * - Uses StrictHostKeyVerifier for server key verification
+ * - Prevents man-in-the-middle (MITM) attacks
+ * - Stores known host fingerprints securely
  */
-class SSHClientWrapper {
+class SSHClientWrapper(private val context: Context) {
 
+    private val hostKeyVerifier = StrictHostKeyVerifier(context)
+    
     private val sshClient = SshClient.setUpDefaultClient().apply {
-        serverKeyVerifier = AcceptAllServerKeyVerifier.INSTANCE
+        serverKeyVerifier = hostKeyVerifier
         start()
     }
 
@@ -35,8 +43,26 @@ class SSHClientWrapper {
 
     /**
      * Connect to SSH server
+     * Note: This method expects password and passphrase to be set in the connection object
+     * For secure usage, use connect(connection, password, passphrase) instead
      */
     suspend fun connect(connection: SSHConnection): Result<ClientSession> {
+        return connect(connection, null, null)
+    }
+
+    /**
+     * Connect to SSH server with explicit credentials
+     * 
+     * @param connection The SSH connection metadata
+     * @param password Optional password (for PASSWORD auth type)
+     * @param passphrase Optional private key passphrase (for PRIVATE_KEY auth type)
+     * @return Result with ClientSession on success
+     */
+    suspend fun connect(
+        connection: SSHConnection,
+        password: String?,
+        passphrase: String?
+    ): Result<ClientSession> {
         return try {
             _connectionState.value = ConnectionState.Connecting
 
@@ -52,10 +78,10 @@ class SSHClientWrapper {
             // Authenticate based on auth type
             val authSuccess = when (connection.authType) {
                 SSHConnection.AuthType.PASSWORD -> {
-                    authenticateWithPassword(session, connection.password)
+                    authenticateWithPassword(session, password)
                 }
                 SSHConnection.AuthType.PRIVATE_KEY -> {
-                    authenticateWithPrivateKey(session, connection.privateKeyPath, connection.privateKeyPassphrase)
+                    authenticateWithPrivateKey(session, connection.privateKeyPath, passphrase)
                 }
             }
 
@@ -223,6 +249,46 @@ class SSHClientWrapper {
     fun stop() {
         disconnect()
         sshClient.stop()
+    }
+
+    /**
+     * Get the host key verifier for managing server fingerprints
+     */
+    fun getHostKeyVerifier(): StrictHostKeyVerifier = hostKeyVerifier
+
+    /**
+     * Check if a host is known (has been connected before)
+     */
+    fun isHostKnown(host: String, port: Int): Boolean {
+        return hostKeyVerifier.isHostKnown(host, port)
+    }
+
+    /**
+     * Accept a host key after user confirmation
+     */
+    fun acceptHostKey(host: String, port: Int): Result<Unit> {
+        return hostKeyVerifier.acceptHostKey(host, port)
+    }
+
+    /**
+     * Reject a host key
+     */
+    fun rejectHostKey(host: String, port: Int) {
+        hostKeyVerifier.rejectHostKey(host, port)
+    }
+
+    /**
+     * Remove a known host key (for key rotation or manual removal)
+     */
+    fun removeHostKey(host: String, port: Int): Result<Unit> {
+        return hostKeyVerifier.removeHostKey(host, port)
+    }
+
+    /**
+     * Get all known hosts
+     */
+    fun getKnownHosts(): Map<String, com.sshpad.app.ssh.verifier.ServerFingerprint> {
+        return hostKeyVerifier.getKnownHosts()
     }
 }
 
