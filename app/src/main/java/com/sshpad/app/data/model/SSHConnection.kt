@@ -1,5 +1,6 @@
 package com.sshpad.app.data.model
 
+import com.sshpad.app.util.AppConstants
 import java.util.UUID
 
 /**
@@ -14,7 +15,7 @@ data class SSHConnection(
     val id: String = UUID.randomUUID().toString(),
     val name: String,
     val host: String,
-    val port: Int = 22,
+    val port: Int = AppConstants.SSH_DEFAULT_PORT,
     val username: String,
     val authType: AuthType = AuthType.PASSWORD,
     // Note: password is intentionally excluded from this model
@@ -22,8 +23,8 @@ data class SSHConnection(
     val privateKeyPath: String? = null,
     // Note: privateKeyPassphrase is intentionally excluded from this model
     // Store in SecureStorage using connection.id as key
-    val keepAliveInterval: Int = 60, // seconds
-    val connectionTimeout: Int = 30000, // milliseconds
+    val keepAliveInterval: Int = AppConstants.SSH_KEEPALIVE_INTERVAL_SECONDS, // seconds
+    val connectionTimeout: Int = AppConstants.SSH_CONNECT_TIMEOUT_MS.toInt(), // milliseconds
     val lastConnectedAt: Long? = null,
     val createdAt: Long = System.currentTimeMillis(),
     val updatedAt: Long = System.currentTimeMillis(),
