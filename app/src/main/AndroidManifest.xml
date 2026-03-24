@@ -44,7 +44,7 @@
 
         <!-- SSH Connection Service (Foreground) -->
         <service
-            android:name=".ssh.SSHConnectionService"
+            android:name=".service.SSHConnectionService"
             android:enabled="true"
             android:exported="false"
             android:foregroundServiceType="dataSync" />
