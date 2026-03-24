@@ -48,14 +48,6 @@ class ConnectionEditViewModel(
         }
     }
 
-    init {
-        // Only load connection data if editConnectionId is already set
-        // (for cases where ViewModel is recreated during configuration changes)
-        if (editConnectionId != null) {
-            loadConnectionData()
-        }
-    }
-
     /**
      * Load connection data if editing existing connection
      */

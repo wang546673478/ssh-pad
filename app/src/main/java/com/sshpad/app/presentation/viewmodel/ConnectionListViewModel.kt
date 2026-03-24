@@ -48,28 +48,9 @@ class ConnectionListViewModel(
         )
 
     init {
-        loadConnections()
+        // Loading is managed by the connections StateFlow
+        // Initial loading state will be set when first connection is received
         loadRecentConnections()
-    }
-
-    /**
-     * Load all connections
-     */
-    private fun loadConnections() {
-        viewModelScope.launch {
-            _uiState.update { it.copy(isLoading = true) }
-            // Connections are loaded automatically via the StateFlow
-            // We can use the first emission to know loading is complete
-            getSSHConnectionsUseCase()
-                .catch { e ->
-                    _uiState.update { it.copy(isLoading = false, error = e.message) }
-                }
-                .collect {
-                    // First collection means data is ready
-                    _uiState.update { it.copy(isLoading = false) }
-                    return@collect
-                }
-        }
     }
 
     /**
