@@ -1,0 +1,193 @@
+1<?xml version="1.0" encoding="utf-8"?>
+2<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+3    package="com.sshpad.app.debug"
+4    android:versionCode="1"
+5    android:versionName="0.6.6-fix" >
+6
+7    <uses-sdk
+8        android:minSdkVersion="31"
+9        android:targetSdkVersion="34" />
+10
+11    <!-- Network Permissions -->
+12    <uses-permission android:name="android.permission.INTERNET" />
+12-->/vol1/1000/openclaw/projects/ssh-pad/app/src/main/AndroidManifest.xml:6:5-67
+12-->/vol1/1000/openclaw/projects/ssh-pad/app/src/main/AndroidManifest.xml:6:22-64
+13    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+13-->/vol1/1000/openclaw/projects/ssh-pad/app/src/main/AndroidManifest.xml:7:5-79
+13-->/vol1/1000/openclaw/projects/ssh-pad/app/src/main/AndroidManifest.xml:7:22-76
+14    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
+14-->/vol1/1000/openclaw/projects/ssh-pad/app/src/main/AndroidManifest.xml:8:5-79
+14-->/vol1/1000/openclaw/projects/ssh-pad/app/src/main/AndroidManifest.xml:8:22-76
+15
+16    <!-- Foreground Service Permission for Background SSH -->
+17    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+17-->/vol1/1000/openclaw/projects/ssh-pad/app/src/main/AndroidManifest.xml:11:5-77
+17-->/vol1/1000/openclaw/projects/ssh-pad/app/src/main/AndroidManifest.xml:11:22-74
+18    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_DATA_SYNC" />
+18-->/vol1/1000/openclaw/projects/ssh-pad/app/src/main/AndroidManifest.xml:12:5-87
+18-->/vol1/1000/openclaw/projects/ssh-pad/app/src/main/AndroidManifest.xml:12:22-84
+19
+20    <!-- Wake Lock for Keep-Alive -->
+21    <uses-permission android:name="android.permission.WAKE_LOCK" />
+21-->/vol1/1000/openclaw/projects/ssh-pad/app/src/main/AndroidManifest.xml:15:5-68
+21-->/vol1/1000/openclaw/projects/ssh-pad/app/src/main/AndroidManifest.xml:15:22-65
+22
+23    <!-- Biometric Authentication -->
+24    <uses-permission android:name="android.permission.USE_BIOMETRIC" />
+24-->/vol1/1000/openclaw/projects/ssh-pad/app/src/main/AndroidManifest.xml:18:5-72
+24-->/vol1/1000/openclaw/projects/ssh-pad/app/src/main/AndroidManifest.xml:18:22-69
+25
+26    <permission
+26-->[androidx.core:core:1.12.0] /home/admin/.gradle/caches/transforms-3/8e2d42ec42f169bedcd6687d113d49fa/transformed/core-1.12.0/AndroidManifest.xml:22:5-24:47
+27        android:name="com.sshpad.app.debug.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"
+27-->[androidx.core:core:1.12.0] /home/admin/.gradle/caches/transforms-3/8e2d42ec42f169bedcd6687d113d49fa/transformed/core-1.12.0/AndroidManifest.xml:23:9-81
+28        android:protectionLevel="signature" />
+28-->[androidx.core:core:1.12.0] /home/admin/.gradle/caches/transforms-3/8e2d42ec42f169bedcd6687d113d49fa/transformed/core-1.12.0/AndroidManifest.xml:24:9-44
+29
+30    <uses-permission android:name="com.sshpad.app.debug.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION" />
+30-->[androidx.core:core:1.12.0] /home/admin/.gradle/caches/transforms-3/8e2d42ec42f169bedcd6687d113d49fa/transformed/core-1.12.0/AndroidManifest.xml:26:5-97
+30-->[androidx.core:core:1.12.0] /home/admin/.gradle/caches/transforms-3/8e2d42ec42f169bedcd6687d113d49fa/transformed/core-1.12.0/AndroidManifest.xml:26:22-94
+31
+32    <application
+32-->/vol1/1000/openclaw/projects/ssh-pad/app/src/main/AndroidManifest.xml:20:5-52:19
+33        android:name="com.sshpad.app.SSHPadApplication"
+33-->/vol1/1000/openclaw/projects/ssh-pad/app/src/main/AndroidManifest.xml:21:9-42
+34        android:allowBackup="true"
+34-->/vol1/1000/openclaw/projects/ssh-pad/app/src/main/AndroidManifest.xml:22:9-35
+35        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
+35-->[androidx.core:core:1.12.0] /home/admin/.gradle/caches/transforms-3/8e2d42ec42f169bedcd6687d113d49fa/transformed/core-1.12.0/AndroidManifest.xml:28:18-86
+36        android:dataExtractionRules="@xml/data_extraction_rules"
+36-->/vol1/1000/openclaw/projects/ssh-pad/app/src/main/AndroidManifest.xml:23:9-65
+37        android:debuggable="true"
+38        android:extractNativeLibs="false"
+39        android:fullBackupContent="@xml/backup_rules"
+39-->/vol1/1000/openclaw/projects/ssh-pad/app/src/main/AndroidManifest.xml:24:9-54
+40        android:icon="@mipmap/ic_launcher"
+40-->/vol1/1000/openclaw/projects/ssh-pad/app/src/main/AndroidManifest.xml:25:9-43
+41        android:label="@string/app_name"
+41-->/vol1/1000/openclaw/projects/ssh-pad/app/src/main/AndroidManifest.xml:26:9-41
+42        android:roundIcon="@mipmap/ic_launcher_round"
+42-->/vol1/1000/openclaw/projects/ssh-pad/app/src/main/AndroidManifest.xml:27:9-54
+43        android:supportsRtl="true"
+43-->/vol1/1000/openclaw/projects/ssh-pad/app/src/main/AndroidManifest.xml:28:9-35
+44        android:theme="@style/Theme.SSHPad" >
+44-->/vol1/1000/openclaw/projects/ssh-pad/app/src/main/AndroidManifest.xml:29:9-44
+45
+46        <!-- Main Activity -->
+47        <activity
+47-->/vol1/1000/openclaw/projects/ssh-pad/app/src/main/AndroidManifest.xml:33:9-43:20
+48            android:name="com.sshpad.app.presentation.MainActivity"
+48-->/vol1/1000/openclaw/projects/ssh-pad/app/src/main/AndroidManifest.xml:34:13-54
+49            android:configChanges="orientation|screenSize|screenLayout|keyboardHidden"
+49-->/vol1/1000/openclaw/projects/ssh-pad/app/src/main/AndroidManifest.xml:38:13-87
+50            android:exported="true"
+50-->/vol1/1000/openclaw/projects/ssh-pad/app/src/main/AndroidManifest.xml:35:13-36
+51            android:theme="@style/Theme.SSHPad"
+51-->/vol1/1000/openclaw/projects/ssh-pad/app/src/main/AndroidManifest.xml:36:13-48
+52            android:windowSoftInputMode="adjustResize" >
+52-->/vol1/1000/openclaw/projects/ssh-pad/app/src/main/AndroidManifest.xml:37:13-55
+53            <intent-filter>
+53-->/vol1/1000/openclaw/projects/ssh-pad/app/src/main/AndroidManifest.xml:39:13-42:29
+54                <action android:name="android.intent.action.MAIN" />
+54-->/vol1/1000/openclaw/projects/ssh-pad/app/src/main/AndroidManifest.xml:40:17-69
+54-->/vol1/1000/openclaw/projects/ssh-pad/app/src/main/AndroidManifest.xml:40:25-66
+55
+56                <category android:name="android.intent.category.LAUNCHER" />
+56-->/vol1/1000/openclaw/projects/ssh-pad/app/src/main/AndroidManifest.xml:41:17-77
+56-->/vol1/1000/openclaw/projects/ssh-pad/app/src/main/AndroidManifest.xml:41:27-74
+57            </intent-filter>
+58        </activity>
+59
+60        <!-- SSH Connection Service (Foreground) -->
+61        <service
+61-->/vol1/1000/openclaw/projects/ssh-pad/app/src/main/AndroidManifest.xml:46:9-50:56
+62            android:name="com.sshpad.app.service.SSHConnectionService"
+62-->/vol1/1000/openclaw/projects/ssh-pad/app/src/main/AndroidManifest.xml:47:13-57
+63            android:enabled="true"
+63-->/vol1/1000/openclaw/projects/ssh-pad/app/src/main/AndroidManifest.xml:48:13-35
+64            android:exported="false"
+64-->/vol1/1000/openclaw/projects/ssh-pad/app/src/main/AndroidManifest.xml:49:13-37
+65            android:foregroundServiceType="dataSync" />
+65-->/vol1/1000/openclaw/projects/ssh-pad/app/src/main/AndroidManifest.xml:50:13-53
+66
+67        <activity
+67-->[androidx.compose.ui:ui-test-manifest:1.5.4] /home/admin/.gradle/caches/transforms-3/88684751c23880ce8054ad476fff237f/transformed/ui-test-manifest-1.5.4/AndroidManifest.xml:23:9-25:39
+68            android:name="androidx.activity.ComponentActivity"
+68-->[androidx.compose.ui:ui-test-manifest:1.5.4] /home/admin/.gradle/caches/transforms-3/88684751c23880ce8054ad476fff237f/transformed/ui-test-manifest-1.5.4/AndroidManifest.xml:24:13-63
+69            android:exported="true" />
+69-->[androidx.compose.ui:ui-test-manifest:1.5.4] /home/admin/.gradle/caches/transforms-3/88684751c23880ce8054ad476fff237f/transformed/ui-test-manifest-1.5.4/AndroidManifest.xml:25:13-36
+70        <activity
+70-->[androidx.compose.ui:ui-tooling-android:1.5.4] /home/admin/.gradle/caches/transforms-3/e790c0f12a5d0c3915c170d336214258/transformed/ui-tooling-release/AndroidManifest.xml:23:9-25:39
+71            android:name="androidx.compose.ui.tooling.PreviewActivity"
+71-->[androidx.compose.ui:ui-tooling-android:1.5.4] /home/admin/.gradle/caches/transforms-3/e790c0f12a5d0c3915c170d336214258/transformed/ui-tooling-release/AndroidManifest.xml:24:13-71
+72            android:exported="true" />
+72-->[androidx.compose.ui:ui-tooling-android:1.5.4] /home/admin/.gradle/caches/transforms-3/e790c0f12a5d0c3915c170d336214258/transformed/ui-tooling-release/AndroidManifest.xml:25:13-36
+73
+74        <provider
+74-->[androidx.emoji2:emoji2:1.4.0] /home/admin/.gradle/caches/transforms-3/073a40133b1f1e53118d24bc9b618c1d/transformed/emoji2-1.4.0/AndroidManifest.xml:24:9-32:20
+75            android:name="androidx.startup.InitializationProvider"
+75-->[androidx.emoji2:emoji2:1.4.0] /home/admin/.gradle/caches/transforms-3/073a40133b1f1e53118d24bc9b618c1d/transformed/emoji2-1.4.0/AndroidManifest.xml:25:13-67
+76            android:authorities="com.sshpad.app.debug.androidx-startup"
+76-->[androidx.emoji2:emoji2:1.4.0] /home/admin/.gradle/caches/transforms-3/073a40133b1f1e53118d24bc9b618c1d/transformed/emoji2-1.4.0/AndroidManifest.xml:26:13-68
+77            android:exported="false" >
+77-->[androidx.emoji2:emoji2:1.4.0] /home/admin/.gradle/caches/transforms-3/073a40133b1f1e53118d24bc9b618c1d/transformed/emoji2-1.4.0/AndroidManifest.xml:27:13-37
+78            <meta-data
+78-->[androidx.emoji2:emoji2:1.4.0] /home/admin/.gradle/caches/transforms-3/073a40133b1f1e53118d24bc9b618c1d/transformed/emoji2-1.4.0/AndroidManifest.xml:29:13-31:52
+79                android:name="androidx.emoji2.text.EmojiCompatInitializer"
+79-->[androidx.emoji2:emoji2:1.4.0] /home/admin/.gradle/caches/transforms-3/073a40133b1f1e53118d24bc9b618c1d/transformed/emoji2-1.4.0/AndroidManifest.xml:30:17-75
+80                android:value="androidx.startup" />
+80-->[androidx.emoji2:emoji2:1.4.0] /home/admin/.gradle/caches/transforms-3/073a40133b1f1e53118d24bc9b618c1d/transformed/emoji2-1.4.0/AndroidManifest.xml:31:17-49
+81            <meta-data
+81-->[androidx.lifecycle:lifecycle-process:2.6.2] /home/admin/.gradle/caches/transforms-3/3de12f39e03eb6c6beb46380dc6b1f35/transformed/lifecycle-process-2.6.2/AndroidManifest.xml:29:13-31:52
+82                android:name="androidx.lifecycle.ProcessLifecycleInitializer"
+82-->[androidx.lifecycle:lifecycle-process:2.6.2] /home/admin/.gradle/caches/transforms-3/3de12f39e03eb6c6beb46380dc6b1f35/transformed/lifecycle-process-2.6.2/AndroidManifest.xml:30:17-78
+83                android:value="androidx.startup" />
+83-->[androidx.lifecycle:lifecycle-process:2.6.2] /home/admin/.gradle/caches/transforms-3/3de12f39e03eb6c6beb46380dc6b1f35/transformed/lifecycle-process-2.6.2/AndroidManifest.xml:31:17-49
+84            <meta-data
+84-->[androidx.profileinstaller:profileinstaller:1.3.0] /home/admin/.gradle/caches/transforms-3/e87c87b6397c5a8a6873425f4d29b7a3/transformed/profileinstaller-1.3.0/AndroidManifest.xml:29:13-31:52
+85                android:name="androidx.profileinstaller.ProfileInstallerInitializer"
+85-->[androidx.profileinstaller:profileinstaller:1.3.0] /home/admin/.gradle/caches/transforms-3/e87c87b6397c5a8a6873425f4d29b7a3/transformed/profileinstaller-1.3.0/AndroidManifest.xml:30:17-85
+86                android:value="androidx.startup" />
+86-->[androidx.profileinstaller:profileinstaller:1.3.0] /home/admin/.gradle/caches/transforms-3/e87c87b6397c5a8a6873425f4d29b7a3/transformed/profileinstaller-1.3.0/AndroidManifest.xml:31:17-49
+87        </provider>
+88
+89        <receiver
+89-->[androidx.profileinstaller:profileinstaller:1.3.0] /home/admin/.gradle/caches/transforms-3/e87c87b6397c5a8a6873425f4d29b7a3/transformed/profileinstaller-1.3.0/AndroidManifest.xml:34:9-52:20
+90            android:name="androidx.profileinstaller.ProfileInstallReceiver"
+90-->[androidx.profileinstaller:profileinstaller:1.3.0] /home/admin/.gradle/caches/transforms-3/e87c87b6397c5a8a6873425f4d29b7a3/transformed/profileinstaller-1.3.0/AndroidManifest.xml:35:13-76
+91            android:directBootAware="false"
+91-->[androidx.profileinstaller:profileinstaller:1.3.0] /home/admin/.gradle/caches/transforms-3/e87c87b6397c5a8a6873425f4d29b7a3/transformed/profileinstaller-1.3.0/AndroidManifest.xml:36:13-44
+92            android:enabled="true"
+92-->[androidx.profileinstaller:profileinstaller:1.3.0] /home/admin/.gradle/caches/transforms-3/e87c87b6397c5a8a6873425f4d29b7a3/transformed/profileinstaller-1.3.0/AndroidManifest.xml:37:13-35
+93            android:exported="true"
+93-->[androidx.profileinstaller:profileinstaller:1.3.0] /home/admin/.gradle/caches/transforms-3/e87c87b6397c5a8a6873425f4d29b7a3/transformed/profileinstaller-1.3.0/AndroidManifest.xml:38:13-36
+94            android:permission="android.permission.DUMP" >
+94-->[androidx.profileinstaller:profileinstaller:1.3.0] /home/admin/.gradle/caches/transforms-3/e87c87b6397c5a8a6873425f4d29b7a3/transformed/profileinstaller-1.3.0/AndroidManifest.xml:39:13-57
+95            <intent-filter>
+95-->[androidx.profileinstaller:profileinstaller:1.3.0] /home/admin/.gradle/caches/transforms-3/e87c87b6397c5a8a6873425f4d29b7a3/transformed/profileinstaller-1.3.0/AndroidManifest.xml:40:13-42:29
+96                <action android:name="androidx.profileinstaller.action.INSTALL_PROFILE" />
+96-->[androidx.profileinstaller:profileinstaller:1.3.0] /home/admin/.gradle/caches/transforms-3/e87c87b6397c5a8a6873425f4d29b7a3/transformed/profileinstaller-1.3.0/AndroidManifest.xml:41:17-91
+96-->[androidx.profileinstaller:profileinstaller:1.3.0] /home/admin/.gradle/caches/transforms-3/e87c87b6397c5a8a6873425f4d29b7a3/transformed/profileinstaller-1.3.0/AndroidManifest.xml:41:25-88
+97            </intent-filter>
+98            <intent-filter>
+98-->[androidx.profileinstaller:profileinstaller:1.3.0] /home/admin/.gradle/caches/transforms-3/e87c87b6397c5a8a6873425f4d29b7a3/transformed/profileinstaller-1.3.0/AndroidManifest.xml:43:13-45:29
+99                <action android:name="androidx.profileinstaller.action.SKIP_FILE" />
+99-->[androidx.profileinstaller:profileinstaller:1.3.0] /home/admin/.gradle/caches/transforms-3/e87c87b6397c5a8a6873425f4d29b7a3/transformed/profileinstaller-1.3.0/AndroidManifest.xml:44:17-85
+99-->[androidx.profileinstaller:profileinstaller:1.3.0] /home/admin/.gradle/caches/transforms-3/e87c87b6397c5a8a6873425f4d29b7a3/transformed/profileinstaller-1.3.0/AndroidManifest.xml:44:25-82
+100            </intent-filter>
+101            <intent-filter>
+101-->[androidx.profileinstaller:profileinstaller:1.3.0] /home/admin/.gradle/caches/transforms-3/e87c87b6397c5a8a6873425f4d29b7a3/transformed/profileinstaller-1.3.0/AndroidManifest.xml:46:13-48:29
+102                <action android:name="androidx.profileinstaller.action.SAVE_PROFILE" />
+102-->[androidx.profileinstaller:profileinstaller:1.3.0] /home/admin/.gradle/caches/transforms-3/e87c87b6397c5a8a6873425f4d29b7a3/transformed/profileinstaller-1.3.0/AndroidManifest.xml:47:17-88
+102-->[androidx.profileinstaller:profileinstaller:1.3.0] /home/admin/.gradle/caches/transforms-3/e87c87b6397c5a8a6873425f4d29b7a3/transformed/profileinstaller-1.3.0/AndroidManifest.xml:47:25-85
+103            </intent-filter>
+104            <intent-filter>
+104-->[androidx.profileinstaller:profileinstaller:1.3.0] /home/admin/.gradle/caches/transforms-3/e87c87b6397c5a8a6873425f4d29b7a3/transformed/profileinstaller-1.3.0/AndroidManifest.xml:49:13-51:29
+105                <action android:name="androidx.profileinstaller.action.BENCHMARK_OPERATION" />
+105-->[androidx.profileinstaller:profileinstaller:1.3.0] /home/admin/.gradle/caches/transforms-3/e87c87b6397c5a8a6873425f4d29b7a3/transformed/profileinstaller-1.3.0/AndroidManifest.xml:50:17-95
+105-->[androidx.profileinstaller:profileinstaller:1.3.0] /home/admin/.gradle/caches/transforms-3/e87c87b6397c5a8a6873425f4d29b7a3/transformed/profileinstaller-1.3.0/AndroidManifest.xml:50:25-92
+106            </intent-filter>
+107        </receiver>
+108    </application>
+109
+110</manifest>

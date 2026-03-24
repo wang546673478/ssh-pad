@@ -1,0 +1,38 @@
+{
+    "logs": [
+        {
+            "outputFile": "com.sshpad.app-mergeReleaseResources-56:/values-v16/values-v16.xml",
+            "map": [
+                {
+                    "source": "/home/admin/.gradle/caches/transforms-3/0a65749f9f067aab283f58c63aac88aa/transformed/appcompat-1.6.1/res/values-v16/values-v16.xml",
+                    "from": {
+                        "startLines": "2",
+                        "startColumns": "4",
+                        "startOffsets": "55",
+                        "endLines": "5",
+                        "endColumns": "12",
+                        "endOffsets": "223"
+                    },
+                    "to": {
+                        "startLines": "3",
+                        "startColumns": "4",
+                        "startOffsets": "121",
+                        "endLines": "6",
+                        "endColumns": "12",
+                        "endOffsets": "289"
+                    }
+                },
+                {
+                    "source": "/home/admin/.gradle/caches/transforms-3/8e2d42ec42f169bedcd6687d113d49fa/transformed/core-1.12.0/res/values-v16/values-v16.xml",
+                    "from": {
+                        "startLines": "2",
+                        "startColumns": "4",
+                        "startOffsets": "55",
+                        "endColumns": "65",
+                        "endOffsets": "116"
+                    }
+                }
+            ]
+        }
+    ]
+}

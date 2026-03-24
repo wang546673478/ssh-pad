@@ -155,6 +155,11 @@ class TerminalViewModel(
             if (connection != null) {
                 currentConnectionHost = connection.host
                 currentConnectionPort = connection.port
+            } else {
+                // Connection not found - should not happen if called from valid navigation
+                _uiState.update { it.copy(isConnecting = false, error = "Connection not found") }
+                appendOutput("✗ Error: Connection '$connectionId' not found\n")
+                return@launch
             }
             
             connectToServerUseCase(connectionId)

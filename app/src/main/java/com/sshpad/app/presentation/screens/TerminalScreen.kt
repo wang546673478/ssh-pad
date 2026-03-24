@@ -51,7 +51,9 @@ fun TerminalScreen(
 
     // Auto-connect when screen is shown
     LaunchedEffect(connectionId) {
-        viewModel.connect(connectionId)
+        if (connectionId.isNotBlank()) {
+            viewModel.connect(connectionId)
+        }
     }
 
     // Handle disconnection - navigate back when disconnected by remote
