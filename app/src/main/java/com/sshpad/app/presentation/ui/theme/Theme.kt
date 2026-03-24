@@ -67,7 +67,8 @@ fun SSHPadTheme(
     }
 
     MaterialTheme(
-        colorScheme = colorScheme,
-        content = content
-    )
+        colorScheme = colorScheme
+    ) {
+        content()
+    }
 }

@@ -56,7 +56,8 @@ fun TerminalScreen(
 
     // Handle disconnection - navigate back when disconnected by remote
     LaunchedEffect(connectionState) {
-        if (connectionState is com.sshpad.app.ssh.ConnectionState.Disconnected && uiState.isConnected) {
+        // Guard: only handle disconnection if we had a valid connectionId
+        if (connectionId.isNotEmpty() && connectionState is com.sshpad.app.ssh.ConnectionState.Disconnected && uiState.isConnected) {
             onDisconnect()
         }
     }
