@@ -1,8 +1,6 @@
 package com.sshpad.app.presentation.viewmodel
 
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.sshpad.app.data.model.SSHConnection
 import com.sshpad.app.domain.usecase.CreateSSHConnectionUseCase
@@ -20,7 +18,6 @@ import kotlinx.coroutines.launch
  * Responsibility: Manage UI state for connection form, validation, and save operations
  */
 class ConnectionEditViewModel(
-    private val savedStateHandle: SavedStateHandle,
     private val getSSHConnectionsUseCase: GetSSHConnectionsUseCase,
     private val createSSHConnectionUseCase: CreateSSHConnectionUseCase
 ) : ViewModel() {
@@ -34,26 +31,12 @@ class ConnectionEditViewModel(
     // Flag to prevent duplicate loading of connection data
     private var isDataLoaded = false
 
-    // Form state - persisted across configuration changes
-    private var connectionName: String?
-        get() = savedStateHandle["connectionName"]
-        set(value) { savedStateHandle["connectionName"] = value }
-    
-    private var host: String?
-        get() = savedStateHandle["host"]
-        set(value) { savedStateHandle["host"] = value }
-    
-    private var port: String?
-        get() = savedStateHandle["port"]
-        set(value) { savedStateHandle["port"] = value }
-    
-    private var username: String?
-        get() = savedStateHandle["username"]
-        set(value) { savedStateHandle["username"] = value }
-    
-    private var authType: String?
-        get() = savedStateHandle["authType"]
-        set(value) { savedStateHandle["authType"] = value }
+    // Form state - persisted in ViewModel (survives configuration changes via StateFlow)
+    private var connectionName: String? = null
+    private var host: String? = null
+    private var port: String? = null
+    private var username: String? = null
+    private var authType: String? = null
 
     /**
      * Set connection ID for edit mode

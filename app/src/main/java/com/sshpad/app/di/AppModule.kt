@@ -1,6 +1,5 @@
 package com.sshpad.app.di
 
-import androidx.lifecycle.SavedStateHandle
 import com.sshpad.app.data.repository.SSHConnectionRepository
 import com.sshpad.app.data.repository.impl.SSHConnectionRepositoryImpl
 import com.sshpad.app.domain.usecase.ConnectToServerUseCase
@@ -48,6 +47,7 @@ val appModule = module {
     single { DeleteSSHConnectionUseCase(get()) }
     single { ConnectToServerUseCase(get(), get()) }
     single { UpdateLastConnectedAtUseCase(get()) }
+    single { GetRecentConnectionsUseCase(get()) }
     
     // ViewModels - Presentation Layer
     viewModel { 
@@ -62,7 +62,6 @@ val appModule = module {
     
     viewModel { 
         ConnectionEditViewModel(
-            savedStateHandle = get<SavedStateHandle>(),
             getSSHConnectionsUseCase = get(),
             createSSHConnectionUseCase = get()
         ) 
