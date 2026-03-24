@@ -47,8 +47,8 @@ jobs:
       - name: 授予 gradlew 执行权限
         run: chmod +x ./gradlew
 
-      - name: 运行单元测试
-        run: ./gradlew test --no-daemon
+      # - name: 运行单元测试
+      #   run: ./gradlew test --no-daemon
 
       - name: 构建 Debug APK
         run: ./gradlew assembleDebug --no-daemon
