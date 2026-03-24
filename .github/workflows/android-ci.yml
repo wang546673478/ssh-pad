@@ -100,12 +100,7 @@ jobs:
 
       - name: 构建 Release APK
         run: ./gradlew assembleRelease --no-daemon
-        env:
-          # 如果有签名配置，可在此添加环境变量
-          # RELEASE_STORE_FILE: ${{ secrets.RELEASE_STORE_FILE }}
-          # RELEASE_KEY_ALIAS: ${{ secrets.RELEASE_KEY_ALIAS }}
-          # RELEASE_STORE_PASSWORD: ${{ secrets.RELEASE_STORE_PASSWORD }}
-          # RELEASE_KEY_PASSWORD: ${{ secrets.RELEASE_KEY_PASSWORD }}
+        env: {}
 
       - name: 上传 Release APK 到 GitHub Releases
         uses: softprops/action-gh-release@v2
