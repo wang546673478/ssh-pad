@@ -28,7 +28,7 @@ class SSHConnectionService : Service() {
 
     private val serviceScope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
     private val binder = LocalBinder()
-    private val sshClient = SSHClientWrapper()
+    private lateinit var sshClient: SSHClientWrapper
     private var connectionJob: Job? = null
 
     inner class LocalBinder : Binder() {
@@ -39,6 +39,7 @@ class SSHConnectionService : Service() {
 
     override fun onCreate() {
         super.onCreate()
+        sshClient = SSHClientWrapper(this)
         createNotificationChannel()
     }
 

@@ -4,6 +4,15 @@ import com.sshpad.app.data.model.SSHConnection
 import kotlinx.coroutines.flow.Flow
 
 /**
+ * Connection with credentials for authentication
+ */
+data class SSHConnectionWithCredentials(
+    val connection: SSHConnection,
+    val password: String?,
+    val passphrase: String?
+)
+
+/**
  * Repository interface for SSH connection management
  */
 interface SSHConnectionRepository {
@@ -17,6 +26,12 @@ interface SSHConnectionRepository {
      * Get connection by ID
      */
     suspend fun getConnectionById(id: String): SSHConnection?
+    
+    /**
+     * Get connection with credentials loaded from SecureStorage
+     * Use this when you need password or passphrase for authentication
+     */
+    suspend fun getConnectionWithCredentials(id: String): SSHConnectionWithCredentials?
     
     /**
      * Get recently used connections (sorted by lastConnectedAt)

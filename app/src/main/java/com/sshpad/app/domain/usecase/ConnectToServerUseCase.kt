@@ -2,6 +2,7 @@ package com.sshpad.app.domain.usecase
 
 import com.sshpad.app.data.model.SSHConnection
 import com.sshpad.app.data.repository.SSHConnectionRepository
+import com.sshpad.app.data.repository.SSHConnectionWithCredentials
 import com.sshpad.app.ssh.SSHClientWrapper
 import kotlinx.coroutines.flow.Flow
 
@@ -21,15 +22,34 @@ class ConnectToServerUseCase(
      * @return Result indicating success or failure
      */
     suspend operator fun invoke(connectionId: String): Result<Unit> {
-        // Get connection
-        val connection = repository.getConnectionById(connectionId)
+        // Get connection with credentials from SecureStorage
+        val connectionWithCredentials = repository.getConnectionWithCredentials(connectionId)
             ?: return Result.failure(Exception("Connection not found"))
 
-        // Connect using SSH client
-        // Note: Credentials should be passed separately via SSHClientWrapper
-        // This is simplified - in production, use connect with credentials
-        return sshClientWrapper.connect(connection)
-            .map { /* Connection successful */ Unit }
+        val connection = connectionWithCredentials.connection
+
+        // Connect using SSH client with credentials from SecureStorage
+        val connectResult = sshClientWrapper.connect(
+            connection = connection,
+            password = connectionWithCredentials.password,
+            passphrase = connectionWithCredentials.passphrase
+        )
+        
+        if (connectResult.isFailure) {
+            return Result.failure(connectResult.exceptionOrNull() ?: Exception("Connection failed"))
+        }
+        
+        // Start shell session after successful connection
+        val shellResult = sshClientWrapper.startShell()
+        
+        // Update last connected timestamp
+        repository.updateLastConnectedAt(connectionId)
+        
+        return if (shellResult.isSuccess) {
+            Result.success(Unit)
+        } else {
+            Result.failure(shellResult.exceptionOrNull() ?: Exception("Failed to start shell"))
+        }
     }
 
     /**

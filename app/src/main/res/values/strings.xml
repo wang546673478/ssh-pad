@@ -25,4 +25,67 @@
     <string name="zoom_in">Zoom In</string>
     <string name="zoom_out">Zoom Out</string>
     <string name="clear_screen">Clear Screen</string>
+    
+    <!-- Content Descriptions -->
+    <string name="back">Back</string>
+    <string name="add_connection">Add Connection</string>
+    <string name="edit">Edit</string>
+    <string name="more">More</string>
+    
+    <!-- Placeholders -->
+    <string name="connection_name_placeholder">e.g., Production Server</string>
+    <string name="host_placeholder">IP address or hostname</string>
+    
+    <!-- Labels -->
+    <string name="keep_alive_interval">Keep-Alive Interval (seconds)</string>
+    <string name="select_private_key_file">Select Private Key File</string>
+    
+    <!-- Buttons -->
+    <string name="update_connection">Update Connection</string>
+    <string name="create_connection">Create Connection</string>
+    <string name="dismiss">Dismiss</string>
+    <string name="ssh_connections">SSH Connections</string>
+    <string name="no_connections_yet">No connections yet</string>
+    <string name="tap_to_add_connection">Tap + to add your first SSH connection</string>
+    
+    <!-- Dialogs -->
+    <string name="delete_connection">Delete Connection</string>
+    <string name="delete_confirmation">Are you sure you want to delete \'%1$s\'?</string>
+    <string name="delete_connection_confirm">Are you sure you want to delete \'%1$s\'?</string>
+    
+    <!-- Terminal Screen -->
+    <string name="connecting">Connecting…</string>
+    <string name="connected">Connected</string>
+    <string name="disconnected">Disconnected</string>
+    <string name="connecting_to_server">Connecting to server…</string>
+    
+    <!-- Host Key Confirmation Dialog -->
+    <string name="verify_host_key">Verify Host Key</string>
+    <string name="host_key_description">This is your first time connecting to this server. Please verify the host key fingerprint to ensure you\'re connecting to the correct server.</string>
+    <string name="server">Server</string>
+    <string name="fingerprint">Fingerprint</string>
+    <string name="sha256_fingerprint_format">SHA256 fingerprint format</string>
+    <string name="trust_server_warning">Only accept if you trust this server</string>
+    <string name="reject">Reject</string>
+    <string name="accept">Accept</string>
+    
+    <!-- Error Messages -->
+    <string name="error_connection_name_empty">Connection name cannot be empty</string>
+    <string name="error_host_empty">Host cannot be empty</string>
+    <string name="error_port_invalid">Port must be between 1 and 65535</string>
+    <string name="error_username_empty">Username cannot be empty</string>
+    <string name="error_connection_id_empty">Connection ID cannot be empty</string>
+    <string name="error_connection_not_found">Connection not found</string>
+    
+    <!-- Status Messages -->
+    <string name="failed_to_load_connections">Failed to load connections: %1$s</string>
+    <string name="connection_created_success">Connection \'%1$s\' created successfully</string>
+    <string name="failed_to_create_connection">Failed to create connection: %1$s</string>
+    <string name="connection_deleted_success">Connection deleted successfully</string>
+    <string name="failed_to_delete_connection">Failed to delete connection: %1$s</string>
+    <string name="connected_successfully">Connected successfully</string>
+    <string name="failed_to_connect">Failed to connect: %1$s</string>
+    <string name="host_key_accepted">Host key accepted, connecting…</string>
+    <string name="failed_to_accept_host_key">Failed to accept host key: %1$s</string>
+    <string name="host_key_rejected">Host key rejected - connection aborted</string>
 </resources>

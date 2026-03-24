@@ -1,11 +1,16 @@
 package com.sshpad.app.di
 
+import androidx.lifecycle.SavedStateHandle
 import com.sshpad.app.data.repository.SSHConnectionRepository
 import com.sshpad.app.data.repository.impl.SSHConnectionRepositoryImpl
 import com.sshpad.app.domain.usecase.ConnectToServerUseCase
 import com.sshpad.app.domain.usecase.CreateSSHConnectionUseCase
 import com.sshpad.app.domain.usecase.DeleteSSHConnectionUseCase
+import com.sshpad.app.domain.usecase.GetRecentConnectionsUseCase
 import com.sshpad.app.domain.usecase.GetSSHConnectionsUseCase
+import com.sshpad.app.domain.usecase.UpdateLastConnectedAtUseCase
+import com.sshpad.app.presentation.viewmodel.ConnectionEditViewModel
+import com.sshpad.app.presentation.viewmodel.ConnectionListViewModel
 import com.sshpad.app.presentation.viewmodel.SSHConnectionViewModel
 import com.sshpad.app.presentation.viewmodel.TerminalViewModel
 import com.sshpad.app.security.SecureStorage
@@ -42,21 +47,41 @@ val appModule = module {
     single { CreateSSHConnectionUseCase(get()) }
     single { DeleteSSHConnectionUseCase(get()) }
     single { ConnectToServerUseCase(get(), get()) }
+    single { UpdateLastConnectedAtUseCase(get()) }
     
     // ViewModels - Presentation Layer
+    viewModel { 
+        ConnectionListViewModel(
+            getSSHConnectionsUseCase = get(),
+            getRecentConnectionsUseCase = get(),
+            createSSHConnectionUseCase = get(),
+            deleteSSHConnectionUseCase = get(),
+            updateLastConnectedAtUseCase = get()
+        ) 
+    }
+    
+    viewModel { 
+        ConnectionEditViewModel(
+            savedStateHandle = get<SavedStateHandle>(),
+            getSSHConnectionsUseCase = get(),
+            createSSHConnectionUseCase = get()
+        ) 
+    }
+    
     viewModel { 
         SSHConnectionViewModel(
             getSSHConnectionsUseCase = get(),
             createSSHConnectionUseCase = get(),
             deleteSSHConnectionUseCase = get(),
             connectToServerUseCase = get()
-        ) 
+        )
     }
     
     viewModel { 
         TerminalViewModel(
             sshClientWrapper = get(),
-            connectToServerUseCase = get()
+            connectToServerUseCase = get(),
+            repository = get()
         ) 
     }
 }

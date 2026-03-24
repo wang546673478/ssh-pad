@@ -8,8 +8,10 @@ import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import com.sshpad.app.data.model.SSHConnection
 import com.sshpad.app.data.repository.SSHConnectionRepository
+import com.sshpad.app.data.repository.SSHConnectionWithCredentials
 import com.sshpad.app.security.SecureStorage
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.map
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.encodeToString
@@ -91,41 +93,43 @@ class SSHConnectionRepositoryImpl(
     }
 
     override suspend fun getConnectionById(id: String): SSHConnection? {
-        return context.dataStore.data.map { preferences ->
-            val connectionsJson = preferences[CONNECTIONS_KEY] ?: return@map null
-            try {
-                val connectionList = json.decodeFromString<List<ConnectionJson>>(connectionsJson)
-                connectionList.find { it.id == id }?.toDomainModel()
-            } catch (e: Exception) {
-                null
-            }
-        }.firstOrNull()
+        val preferences = context.dataStore.data.firstOrNull() ?: return null
+        val connectionsJson = preferences[CONNECTIONS_KEY] ?: return null
+        return try {
+            val connectionList = json.decodeFromString<List<ConnectionJson>>(connectionsJson)
+            connectionList.find { it.id == id }?.toDomainModel()
+        } catch (e: Exception) {
+            null
+        }
     }
 
     /**
      * Get connection with credentials loaded from SecureStorage
      * Use this when you need to access password or passphrase
      */
-    suspend fun getConnectionWithCredentials(id: String): SSHConnectionWithCredentials? {
+    override suspend fun getConnectionWithCredentials(id: String): SSHConnectionWithCredentials? {
         val connection = getConnectionById(id) ?: return null
         val credentials = getCredentials(id)
-        return SSHConnectionWithCredentials(connection, credentials.password, credentials.passphrase)
+        return SSHConnectionWithCredentials(
+            connection = connection,
+            password = credentials.password,
+            passphrase = credentials.passphrase
+        )
     }
 
     override suspend fun getRecentConnections(limit: Int): List<SSHConnection> {
-        return context.dataStore.data.map { preferences ->
-            val connectionsJson = preferences[CONNECTIONS_KEY] ?: return@map emptyList()
-            try {
-                val connectionList = json.decodeFromString<List<ConnectionJson>>(connectionsJson)
-                connectionList
-                    .filter { it.lastConnectedAt != null }
-                    .sortedByDescending { it.lastConnectedAt }
-                    .take(limit)
-                    .map { it.toDomainModel() }
-            } catch (e: Exception) {
-                emptyList()
-            }
-        }.firstOrNull() ?: emptyList()
+        val preferences = context.dataStore.data.firstOrNull() ?: return emptyList()
+        val connectionsJson = preferences[CONNECTIONS_KEY] ?: return emptyList()
+        return try {
+            val connectionList = json.decodeFromString<List<ConnectionJson>>(connectionsJson)
+            connectionList
+                .filter { it.lastConnectedAt != null }
+                .sortedByDescending { it.lastConnectedAt }
+                .take(limit)
+                .map { it.toDomainModel() }
+        } catch (e: Exception) {
+            emptyList()
+        }
     }
 
     override suspend fun addConnection(connection: SSHConnection): Result<String> {
@@ -221,15 +225,14 @@ class SSHConnectionRepositoryImpl(
     }
 
     override suspend fun searchConnections(query: String): List<SSHConnection> {
-        val allConnections = context.dataStore.data.map { preferences ->
-            val connectionsJson = preferences[CONNECTIONS_KEY] ?: return@map emptyList<SSHConnection>()
-            try {
-                val connectionList = json.decodeFromString<List<ConnectionJson>>(connectionsJson)
-                connectionList.map { it.toDomainModel() }
-            } catch (e: Exception) {
-                emptyList()
-            }
-        }.firstOrNull() ?: emptyList()
+        val preferences = context.dataStore.data.firstOrNull() ?: return emptyList()
+        val connectionsJson = preferences[CONNECTIONS_KEY] ?: return emptyList()
+        val allConnections = try {
+            val connectionList = json.decodeFromString<List<ConnectionJson>>(connectionsJson)
+            connectionList.map { it.toDomainModel() }
+        } catch (e: Exception) {
+            emptyList()
+        }
 
         return allConnections.filter { 
             it.name.contains(query, ignoreCase = true) || 
