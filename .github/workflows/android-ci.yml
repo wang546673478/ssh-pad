@@ -61,9 +61,9 @@ jobs:
           retention-days: 30
           if-no-files-found: warn
 
-      - name: 测试覆盖率报告
-        run: ./gradlew jacocoTestReport --no-daemon
-        continue-on-error: true
+      # - name: 测试覆盖率报告
+      #   run: ./gradlew jacocoTestReport --no-daemon
+      #   continue-on-error: true
 
   # ============================================
   # Release 构建 (仅当创建 tag/release 时)
